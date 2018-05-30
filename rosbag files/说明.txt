@@ -1,0 +1,8 @@
+map1 map2:60s内云端gmapping制图和本地制图的效果(相差无几)
+map3:前30s云端制图,后30s本地制图,(切换以后,云端节点注销,前30s的地图就没了,最后保存的地图是本地的)
+注:
+1 rosrun map_server map_server map.yaml
+发布话题:map 和 map_mtedata
+2
+使用rosrun map_server map_saver -f map;订阅话提map
+保存了两个文件:map.yaml和map.pgm,两个文件在加载地图时缺一不可.

@@ -1,0 +1,202 @@
+<robot
+  name="carurdf">
+  <link
+    name="base_footprint">
+    <inertial>
+      <origin
+        xyz="-3.46944695195361E-18 4.5102810375397E-17 0.026"
+        rpy="0 0 0" />
+      <mass
+        value="0.303178135776057" />
+      <inertia
+        ixx="0.00122571343719098"
+        ixy="1.59612770998232E-19"
+        ixz="-1.1206960747528E-20"
+        iyy="0.00122571343719098"
+        iyz="8.96793349527384E-21"
+        izz="0.0019820963208118" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/base_footprint.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/base_footprint.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="1.1129E-05 2.8813E-05 -0.0089999"
+        rpy="0 0 0" />
+      <mass
+        value="0.038351" />
+      <inertia
+        ixx="1.1615E-05"
+        ixy="-6.9837E-09"
+        ixz="-8.8733E-09"
+        iyy="1.1628E-05"
+        iyz="3.475E-09"
+        izz="1.9528E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/link1.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/link1.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1"
+    type="continuous">
+    <origin
+      xyz="-0.10369 -0.056326 0"
+      rpy="1.5708 0 -1.0732" />
+    <parent
+      link="base_footprint" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="link2">
+    <inertial>
+      <origin
+        xyz="2.6133E-05 -1.6463E-05 -0.0021804"
+        rpy="0 0 0" />
+      <mass
+        value="0.038351" />
+      <inertia
+        ixx="1.163E-05"
+        ixy="4.0148E-09"
+        ixz="5.1167E-09"
+        iyy="1.1613E-05"
+        iyz="8.0408E-09"
+        izz="1.9528E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/link2.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/link2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="jonit2"
+    type="continuous">
+    <origin
+      xyz="0.094809 -0.058073 0"
+      rpy="0.54958 1.5708 0" />
+    <parent
+      link="base_footprint" />
+    <child
+      link="link2" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="link3">
+    <inertial>
+      <origin
+        xyz="-3.0684E-05 3.5349E-06 0.0090001"
+        rpy="0 0 0" />
+      <mass
+        value="0.038351" />
+      <inertia
+        ixx="1.1624E-05"
+        ixy="9.264E-09"
+        ixz="-1.1348E-09"
+        iyy="1.162E-05"
+        iyz="-9.4618E-09"
+        izz="1.9528E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/link3.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://carurdf/meshes/link3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="jonit3"
+    type="continuous">
+    <origin
+      xyz="0 0.11551 0"
+      rpy="-1.5708 0 -3.1416" />
+    <parent
+      link="base_footprint" />
+    <child
+      link="link3" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+</robot>

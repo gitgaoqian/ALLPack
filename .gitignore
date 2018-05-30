@@ -1,0 +1,7 @@
+*.xml~
+*.txt~
+*.py~
+*.msg~
+*.launch~
+*.srv~
+*.cpp~
