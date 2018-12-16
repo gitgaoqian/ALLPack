@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf2
   tf2_ros
   tf2_sensor_msgs
+  PCL
 )
 
 catkin_package(
@@ -20,6 +21,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
 )
 
 add_library(pointcloud_to_laserscan src/pointcloud_to_laserscan_nodelet.cpp)
@@ -27,8 +29,6 @@ target_link_libraries(pointcloud_to_laserscan ${catkin_LIBRARIES})
 
 add_executable(pointcloud_to_laserscan_node src/pointcloud_to_laserscan_node.cpp)
 target_link_libraries(pointcloud_to_laserscan_node pointcloud_to_laserscan ${catkin_LIBRARIES})
-
-
 
 install(TARGETS pointcloud_to_laserscan pointcloud_to_laserscan_node
 	RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -45,3 +45,9 @@ install(FILES nodelets.xml
 install(DIRECTORY launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
+
+if(CATKIN_ENABLE_TESTING)
+  find_package(roslint REQUIRED)
+  roslint_cpp()
+  roslint_add_test()
+endif()

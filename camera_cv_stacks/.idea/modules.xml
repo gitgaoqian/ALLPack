@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$APPLICATION_HOME_DIR$/MyFiles/baidu-ai/.idea/baidu-ai.iml" filepath="$APPLICATION_HOME_DIR$/MyFiles/baidu-ai/.idea/baidu-ai.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/camera_cv_stacks.iml" filepath="$PROJECT_DIR$/.idea/camera_cv_stacks.iml" />
+    </modules>
+  </component>
+</project>

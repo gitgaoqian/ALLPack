@@ -18,7 +18,11 @@
     name="robot_state_publisher"
     pkg="robot_state_publisher"
     type="state_publisher" />
-　
+   <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen" clear_params="true">
+      <rosparam file="$(find rbx1_bringup)/config/fake_turtlebot_arbotix.yaml" command="load" />
+      <param name="sim" value="true"/>
+  </node>
+  
   <node
     name="rviz"
     pkg="rviz"

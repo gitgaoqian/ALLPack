@@ -43,6 +43,7 @@
 #include <pluginlib/class_list_macros.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
 #include <tf2_sensor_msgs/tf2_sensor_msgs.h>
+#include <pcl_ros/transforms.h>
 
 namespace pointcloud_to_laserscan
 {
@@ -54,17 +55,18 @@ namespace pointcloud_to_laserscan
     boost::mutex::scoped_lock lock(connect_mutex_);
     private_nh_ = getPrivateNodeHandle();
 
-    private_nh_.param<std::string>("target_frame", target_frame_, "");
+    private_nh_.param<std::string>("target_frame", target_frame_, "laser_link");
     private_nh_.param<double>("transform_tolerance", tolerance_, 0.01);
-    private_nh_.param<double>("min_height", min_height_, 0.0);
-    private_nh_.param<double>("max_height", max_height_, 1.0);
+    private_nh_.param<double>("min_height", min_height_, std::numeric_limits<double>::min());
+    private_nh_.param<double>("max_height", max_height_, std::numeric_limits<double>::max());
 
-    private_nh_.param<double>("angle_min", angle_min_, -M_PI / 2.0);
-    private_nh_.param<double>("angle_max", angle_max_, M_PI / 2.0);
-    private_nh_.param<double>("angle_increment", angle_increment_, M_PI / 360.0);
+    private_nh_.param<double>("angle_min", angle_min_, - M_PI);
+    private_nh_.param<double>("angle_max", angle_max_, M_PI);
+    private_nh_.param<double>("angle_increment", angle_increment_, M_PI / 180.0);
     private_nh_.param<double>("scan_time", scan_time_, 1.0 / 30.0);
-    private_nh_.param<double>("range_min", range_min_, 0.45);
-    private_nh_.param<double>("range_max", range_max_, 4.0);
+    private_nh_.param<double>("range_min", range_min_, 0.0);
+    private_nh_.param<double>("range_max", range_max_, std::numeric_limits<double>::max());
+    private_nh_.param<double>("inf_epsilon", inf_epsilon_, 1.0);
 
     int concurrency_level;
     private_nh_.param<int>("concurrency_level", concurrency_level, 1);
@@ -133,7 +135,7 @@ namespace pointcloud_to_laserscan
                                                tf2_ros::filter_failure_reasons::FilterFailureReason reason)
   {
     NODELET_WARN_STREAM_THROTTLE(1.0, "Can't transform pointcloud from frame " << cloud_msg->header.frame_id << " to "
-        << message_filter_->getTargetFramesString());
+        << message_filter_->getTargetFramesString() << " at time " << cloud_msg->header.stamp << ", reason: " << reason);
   }
 
   void PointCloudToLaserScanNodelet::cloudCb(const sensor_msgs::PointCloud2ConstPtr &cloud_msg)
@@ -165,7 +167,7 @@ namespace pointcloud_to_laserscan
     }
     else
     {
-      output.ranges.assign(ranges_size, output.range_max + 1.0);
+      output.ranges.assign(ranges_size, output.range_max + inf_epsilon_);
     }
 
     sensor_msgs::PointCloud2ConstPtr cloud_out;
@@ -177,10 +179,14 @@ namespace pointcloud_to_laserscan
       try
       {
         cloud.reset(new sensor_msgs::PointCloud2);
+        ros::Time begin = ros::Time::now();
         tf2_->transform(*cloud_msg, *cloud, target_frame_, ros::Duration(tolerance_));
+        ros::Time end = ros::Time::now();
+        double interval = (end - begin).toSec();
+        printf("interval:%f\n", interval);
         cloud_out = cloud;
       }
-      catch (tf2::TransformException ex)
+      catch (tf2::TransformException &ex)
       {
         NODELET_ERROR_STREAM("Transform failure: " << ex.what());
         return;
@@ -217,6 +223,12 @@ namespace pointcloud_to_laserscan
                       *iter_z);
         continue;
       }
+      if (range > range_max_)
+      {
+        NODELET_DEBUG("rejected for range %f above maximum value %f. Point: (%f, %f, %f)", range, range_max_, *iter_x, *iter_y,
+                      *iter_z);
+        continue;
+      }
 
       double angle = atan2(*iter_y, *iter_x);
       if (angle < output.angle_min || angle > output.angle_max)
@@ -238,4 +250,4 @@ namespace pointcloud_to_laserscan
 
 }
 
-PLUGINLIB_DECLARE_CLASS(pointcloud_to_laserscan, PointCloudToLaserScanNodelet, pointcloud_to_laserscan::PointCloudToLaserScanNodelet, nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(pointcloud_to_laserscan::PointCloudToLaserScanNodelet, nodelet::Nodelet)

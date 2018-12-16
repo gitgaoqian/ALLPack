@@ -162,7 +162,7 @@ void CameraDriver::ReconfigureCallback(UVCCameraConfig &new_config, uint32_t lev
 }
 
 void CameraDriver::ImageCallback(uvc_frame_t *frame) {
-  ros::Time timestamp = ros::Time(frame->capture_time.tv_sec, frame->capture_time.tv_usec);
+  //ros::Time timestamp = ros::Time(frame->capture_time.tv_sec, frame->capture_time.tv_usec);comment on 2018-7-28
 
   boost::recursive_mutex::scoped_lock(mutex_);
 
@@ -219,6 +219,7 @@ void CameraDriver::ImageCallback(uvc_frame_t *frame) {
   sensor_msgs::CameraInfo::Ptr cinfo(
     new sensor_msgs::CameraInfo(cinfo_manager_.getCameraInfo()));
 
+  ros::Time timestamp=ros::Time::now();//new addition:2018-7-28
   image->header.frame_id = config_.frame_id;
   image->header.stamp = timestamp;
   cinfo->header.frame_id = config_.frame_id;
